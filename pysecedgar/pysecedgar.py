@@ -5,7 +5,6 @@ import requests
 import os
 import io
 from bs4 import BeautifulSoup
-from urllib2 import urlopen
 
 def make_dir(path):
     if not os.path.exists(path):
@@ -26,7 +25,7 @@ def get_linklist(cik, formtype, pagecount=40):
 
     links = collections.defaultdict(list)
     url = get_url(cik, formtype)
-    soup = BeautifulSoup(urlopen(url), 'lxml')
+    soup = BeautifulSoup(requests.get(url).content, 'lxml')
     try:
         name = soup.find('name').string
         type = soup.find('type').string
@@ -41,7 +40,7 @@ def get_linklist(cik, formtype, pagecount=40):
                 re.sub('-index.*$', '.txt', f.find('filinghref').string)
             )
         url = get_url(cik, formtype, start=pagenum)
-        soup = BeautifulSoup(urlopen(url), 'lxml')
+        soup = BeautifulSoup(requests.get(url).content, 'lxml')
         pagenum += pagecount
     
     return name, type, links
@@ -55,10 +54,10 @@ def download_files(cik, formtype, bpath=os.getcwd()):
         path = bpath + '/' + type + '/' + name + '/' + date
         make_dir(path)
         for url in links[date]:
-            filing = requests.get(url).text
+            response = requests.get(url)
             fpath = path + '/' + os.path.basename(url)
             with io.open(fpath, 'w', encoding='utf-8') as f:
-                f.write(filing)
+                f.write(response.text)
             print("Retrieved", fpath) 
             nfiles += 1
 
