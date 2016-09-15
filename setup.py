@@ -1,4 +1,6 @@
-from setuptools import setup
+from distutils.core import setup
+
+import pysecedgar
 
 setup(name='pysecedgar',
       version='0.1',
@@ -6,6 +8,4 @@ setup(name='pysecedgar',
       url='https://github.com/nuffe/pysecedgar',
       author='nuffe',
       license='MIT',
-      packages=['pysecedgar'],
-      zip_safe=False)
-
+      py_modules=['pysecedgar'])
