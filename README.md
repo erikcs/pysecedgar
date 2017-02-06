@@ -49,4 +49,5 @@ download_files('0000320193', '10-k')
 Works by constructing the appropriate `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany` "query", then using Beautiful Soup to find each filing's link on the resulting page. Inspiration from various sources on the internet.
 
 #### Todo
+Specify date range
 SIC appended to company name dir?
