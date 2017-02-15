@@ -12,23 +12,8 @@ Download *all* available files for a given filing type (for a company identified
 
 `basedir`: base directory for storing downloaded files (string), default: working directory
 
-Retrieved files are stored according to the hierarchy files are found in on SEC's web pages, for example, downloading all `10-k` and `10-q` files for Apple would create the following directories in the script's invocating root folder:
-```
-├── 10-K
-│   └── APPLE\ COMPUTER\ INC
-│       ├── 1994-12-13
-│       │   └── 0000320193-94-000016.txt
-│       ├── 1995-12-19
-│       │   └── 0000320193-95-000016.txt
-│       ├── 1996-12-19
-│       │   └── 0000320193-96-000023.txt
-...
-├── 10-Q
-│   └── APPLE\ COMPUTER\ INC
-│       ├── 2001-02-12
-│       ├── 2001-05-14
-│       │   └── 0000912057-01-515409.txt
-...
+Files are stored as `basedir/formtype/company name/cik/date/`
+
 ```
 #### Example
 ```python
@@ -49,5 +34,3 @@ Works by constructing the appropriate `https://www.sec.gov/cgi-bin/browse-edgar?
 
 #### Todo
 Specify date range
-
-SIC appended to company name dir?

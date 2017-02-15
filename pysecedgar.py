@@ -58,7 +58,7 @@ def download_filings(cik, formtype, bpath):
     nfiles = 0
 
     for date in links:
-        path = bpath + '/' + type + '/' + name + '/' + date
+        path = bpath + '/' + type + '/' + name + '/' + cik + '/' + date
         make_dir(path)
         for url in links[date]:
             response = requests.get(url)
