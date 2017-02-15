@@ -4,6 +4,7 @@ import re
 import requests
 import os
 import io
+import pandas as pd
 from bs4 import BeautifulSoup
 
 def make_dir(path):
@@ -50,6 +51,7 @@ def get_linklist(cik, formtype, pagecount=40):
 def download_filings(cik, formtype, bpath):
 
     name, type, links = get_linklist(cik, formtype)
+    log = []
     nfiles = 0
 
     for date in links:
@@ -61,9 +63,13 @@ def download_filings(cik, formtype, bpath):
             with io.open(fpath, 'w', encoding='utf-8') as f:
                 f.write(response.text)
             print("Retrieved", fpath)
+            log.append([cik, name, date, formtype, fpath])
             nfiles += 1
 
     print("Retrieved ", nfiles, " files for CIK: ",  cik)
+
+    return pd.DataFrame(log, columns=['cik', 'name', 'date',
+                                      'formtype', 'fpath'])
 
 def download_files(cik=None, formtype=None, basedir=os.getcwd()):
     """
@@ -77,6 +83,11 @@ def download_files(cik=None, formtype=None, basedir=os.getcwd()):
             The form type(s)
         basedir : str, optional
             Path to store downloaded files
+
+    Returns
+    ----------
+        logdf : DataFrame
+            DataFrame with information about everything retrieved
 
     """
     if cik is not None:
@@ -95,10 +106,12 @@ def download_files(cik=None, formtype=None, basedir=os.getcwd()):
     else:
         raise ValueError('formtype(s) must be provided')
 
+    logdf = []
     for c in cik:
         for f in formtype:
-            download_filings(c, f, basedir)
+            logdf.append( download_filings(c, f, basedir) )
 
+    return pd.concat(logdf)
 
 if __name__ == '__main__':
     # Download all N-PX filings for Profunds and Charles Schwab
