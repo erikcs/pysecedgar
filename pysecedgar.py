@@ -1,11 +1,14 @@
-from __future__ import print_function
 import collections
 import re
 import requests
 import os
 import io
+import logging
 import pandas as pd
 from bs4 import BeautifulSoup
+
+logger = logging.getLogger('pysecedgar')
+logging.basicConfig(level=logging.INFO)
 
 def make_dir(path):
     if not os.path.exists(path):
@@ -62,11 +65,11 @@ def download_filings(cik, formtype, bpath):
             fpath = path + '/' + os.path.basename(url)
             with io.open(fpath, 'w', encoding='utf-8') as f:
                 f.write(response.text)
-            print("Retrieved", fpath)
+            logger.info("Retrieved {}".format(fpath))
             log.append([cik, name, date, formtype, fpath])
             nfiles += 1
 
-    print("Retrieved ", nfiles, " files for CIK: ",  cik)
+    logger.info("Retrieved {0} files for CIK: {1}".format(nfiles, cik))
 
     return pd.DataFrame(log, columns=['cik', 'name', 'date',
                                       'formtype', 'fpath'])
