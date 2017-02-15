@@ -47,7 +47,7 @@ def get_linklist(cik, formtype, pagecount=40):
 
     return name, type, links
 
-def download_files(cik, formtype, bpath=os.getcwd()):
+def download_filings(cik, formtype, bpath):
 
     name, type, links = get_linklist(cik, formtype)
     nfiles = 0
@@ -65,12 +65,46 @@ def download_files(cik, formtype, bpath=os.getcwd()):
 
     print("Retrieved ", nfiles, " files for CIK: ",  cik)
 
+def download_files(cik=None, formtype=None, basedir=os.getcwd()):
+    """
+    Usage ...
+
+    Parameters
+    ----------
+        cik : str, list, or tuple
+            The CIK key(s)
+        formtype : str, list, or tuple
+            The form type(s)
+        basedir : str, optional
+            Path to store downloaded files
+
+    """
+    if cik is not None:
+        if not isinstance(cik, (list, tuple)):
+            cik = [cik]
+        else:
+            cik = list(cik)
+    else:
+        raise ValueError('cik(s) must be provided')
+
+    if formtype is not None:
+        if not isinstance(formtype, (list, tuple)):
+            formtype = [formtype]
+        else:
+            formtype = list(formtype)
+    else:
+        raise ValueError('formtype(s) must be provided')
+
+    for c in cik:
+        for f in formtype:
+            download_filings(c, f, basedir)
+
+
 if __name__ == '__main__':
     # Download all N-PX filings for Profunds and Charles Schwab
     ciks = ['0001039803', '0001454889']
     formtype = 'n-px'
-    for cik in ciks:
-        download_files(cik, formtype)
+    download_files(ciks, formtype)
 
-    # Download all 10-K filings for Apple
-    download_files('0000320193', '10-k')
+    # Download all 10-K and 10-Q filings for Apple
+    download_files('0000320193', ['10-k', '10-Q'])
