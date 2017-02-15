@@ -71,14 +71,14 @@ def download_filings(cik, formtype, bpath):
             nfiles += 1
 
     endmsg = "Retrieved {0} {1} filings for CIK {2} ({3})"
-    logger.info(endmsg.format(nfiles, type, cik, name))
+    logger.info(endmsg.format(nfiles, formtype, cik, name))
 
     return pd.DataFrame(log, columns=['cik', 'name', 'date',
                                       'formtype', 'fpath'])
 
 def download_files(cik=None, formtype=None, basedir=os.getcwd()):
     """
-    Download all `formtype` filings for security with key `cik`
+    Download all `formtype` filings for security with Central Index Key `cik`
 
     Parameters
     ----------
