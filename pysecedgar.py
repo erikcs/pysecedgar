@@ -56,27 +56,29 @@ def download_filings(cik, formtype, bpath):
     name, type, links = get_linklist(cik, formtype)
     log = []
     nfiles = 0
+    msg = "Downloading {0} filing {1} for CIK {2} ({3})"
 
     for date in links:
         path = bpath + '/' + type + '/' + name + '/' + cik + '/' + date
         make_dir(path)
         for url in links[date]:
+            logger.info(msg.format(type, date, cik, name))
             response = requests.get(url)
             fpath = path + '/' + os.path.basename(url)
             with io.open(fpath, 'w', encoding='utf-8') as f:
                 f.write(response.text)
-            logger.info("Retrieved {}".format(fpath))
-            log.append([cik, name, date, formtype, fpath])
+            log.append([cik, name, date, formtype.upper(), fpath])
             nfiles += 1
 
-    logger.info("Retrieved {0} files for CIK: {1}".format(nfiles, cik))
+    endmsg = "Retrieved {0} {1} filings for CIK {2} ({3})"
+    logger.info(endmsg.format(nfiles, type, cik, name))
 
     return pd.DataFrame(log, columns=['cik', 'name', 'date',
                                       'formtype', 'fpath'])
 
 def download_files(cik=None, formtype=None, basedir=os.getcwd()):
     """
-    Usage ...
+    Download all `formtype` filings for security with key `cik`
 
     Parameters
     ----------
@@ -84,7 +86,7 @@ def download_files(cik=None, formtype=None, basedir=os.getcwd()):
             The CIK key(s)
         formtype : str, list, or tuple
             The form type(s)
-        basedir : str, optional
+        basedir : str, default current directory
             Path to store downloaded files
 
     Returns
