@@ -14,7 +14,6 @@ Download *all* available files for a given filing type (for a company identified
 
 Files are stored as `basedir/formtype/company name/cik/date/`
 
-```
 #### Example
 ```python
 from pysecedgar import download_files
