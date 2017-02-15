@@ -28,6 +28,15 @@ download_files(ciks, formtype)
 download_files('0000320193', ['10-k', '10-Q'])
 ```
 
+#### Misc
+On [WRDS](https://wrds-web.wharton.upenn.edu/wrds/index.cfm?) the `FUNDA` table in the Compustat library (`COMP`) contains some handy identifiers (`CIK`, `Ticker`, `gvkey`, etc)
+
+```SQL
+SELECT DISTINCT(conm), cik, cusip, tic, gvkey, fyear from COMP.FUNDA
+```
+
+downloads a [table](https://www.dropbox.com/s/6ahl8h4u39nhdi7/keys.csv?dl=0) of these identifiers.
+
 #### How
 Works by constructing the appropriate `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany` "query", then using Beautiful Soup to find each filing's link on the resulting page. Inspiration from various sources on the internet.
 
