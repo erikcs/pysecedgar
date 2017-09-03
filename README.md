@@ -1,7 +1,7 @@
 Download *all* available files for a given filing type (for a company identified by its CIK code)
 
 ##### Installation
-`$ pip install git+https://github.com/nuffe/pysecedgar.git`
+`$ pip install git+https://github.com/erikcs/pysecedgar.git`
 
 ##### Usage
 `download_files(cik, formtype, basedir)`
